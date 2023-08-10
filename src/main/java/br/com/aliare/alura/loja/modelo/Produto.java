@@ -1,12 +1,14 @@
 package br.com.aliare.alura.loja.modelo;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +21,41 @@ public class Produto {
 	@Column(name = "descricao")
 	private String descricao;
 	private BigDecimal preco;
+	private LocalDate dataCadastro = LocalDate.now();
+	@ManyToOne
+	private Categoria categoriaId;
+	
+	public Produto(String nome, String descricao, BigDecimal preco, Categoria categoria) {
+		this.nome = nome;
+		this.descricao = descricao;
+		this.preco = preco;
+		this.categoriaId = categoria;
+	}
+	
+	public Produto() {};
+	
+	public LocalDate getDataCadastro() {
+		return dataCadastro;
+	}
+
+
+
+	public void setDataCadastro(LocalDate dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
+
+
+	public Categoria getCategoriaId() {
+		return categoriaId;
+	}
+
+
+
+	public void setCategoriaId(Categoria categoria) {
+		this.categoriaId = categoria;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -46,7 +83,8 @@ public class Produto {
 	
 	@Override
 	public String toString() {
-		return "Produto [nome = " + nome + ", descricao = " + descricao + ", preco = " + preco + "]";
+		return "Produto [nome=" + nome + ", descricao=" + descricao + ", preco=" + preco + ", dataCadastro = "
+				+ dataCadastro + ", categoria = " + categoriaId + "]";
 	}
 	
 	
