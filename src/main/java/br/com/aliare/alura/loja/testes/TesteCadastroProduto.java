@@ -3,10 +3,10 @@ package br.com.aliare.alura.loja.testes;
 import java.math.BigDecimal;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
+import br.com.aliare.alura.loja.dao.ProdutoDAO;
 import br.com.aliare.alura.loja.modelo.Produto;
+import br.com.aliare.alura.loja.util.JPAUtil;
 
 public class TesteCadastroProduto {
 
@@ -17,12 +17,12 @@ public class TesteCadastroProduto {
 		headset.setNome("Hoopson");
 		headset.setPreco(new BigDecimal("150.00"));
 		
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("loja");
+		EntityManager entityManager = JPAUtil.getEntityManager();
 		
-		EntityManager entityManager = factory.createEntityManager();
+		ProdutoDAO dao = new ProdutoDAO(entityManager);
 		
 		entityManager.getTransaction().begin();	
-		entityManager.persist(headset);
+		dao.cadastrar(headset);	
 		entityManager.getTransaction().commit();
 		entityManager.close();
 
