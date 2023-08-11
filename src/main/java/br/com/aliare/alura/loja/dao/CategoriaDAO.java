@@ -25,5 +25,5 @@ private EntityManager entityManager;
 		categoria = entityManager.merge(categoria);
 		this.entityManager.remove(categoria);
 	}
-
+	
 }

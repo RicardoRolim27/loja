@@ -39,7 +39,6 @@ public class Produto {
 	}
 
 
-
 	public void setDataCadastro(LocalDate dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
@@ -87,6 +86,6 @@ public class Produto {
 				+ dataCadastro + ", categoria = " + categoriaId + "]";
 	}
 	
-	
+
 
 }
