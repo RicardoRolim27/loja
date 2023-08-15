@@ -24,7 +24,15 @@ public class ProdutoDAO {
 		if (id != null) {
 			return entityManager.find(Produto.class, id);
 		}
-		throw new Exception("Erro ao buscar um produto, valor não pode ser nulo!");
+		throw new Exception("Erro ao buscar um produto, valor nï¿½o pode ser nulo!");
+	}
+	
+	public Produto buscarUmProdutoPorNome(String nome) throws Exception {
+		if (nome != null) {
+			String jpql = "SELECT p FROM Produto p WHERE p.nome = :nome";
+			return entityManager.createQuery(jpql, Produto.class).setParameter("nome", nome).getSingleResult();
+		}
+		throw new Exception("Erro ao buscar um produto, valor nï¿½o pode ser nulo!");
 	}
 
 	public List<Produto> buscarTodos() {
@@ -56,7 +64,7 @@ public class ProdutoDAO {
 	public void remover(Produto produto) {
 
 		if (produto == null) {
-			System.out.println("Erro ao tentar remover produto, valor não pode ser nulo!");
+			System.out.println("Erro ao tentar remover produto, valor nï¿½o pode ser nulo!");
 		}
 
 		try {
@@ -64,7 +72,7 @@ public class ProdutoDAO {
 
 			this.entityManager.remove(produto);
 		} catch (Exception e) {
-			System.out.println("Não foi possível remover o produto");
+			System.out.println("Nï¿½o foi possï¿½vel remover o produto");
 			System.out.println(e.getMessage());
 		}
 	}
