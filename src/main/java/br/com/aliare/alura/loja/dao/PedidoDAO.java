@@ -1,8 +1,12 @@
 package br.com.aliare.alura.loja.dao;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import br.com.aliare.alura.loja.modelo.Pedido;
+import br.com.aliare.alura.loja.vo.RelatorioDeVendasVo;
 
 public class PedidoDAO {
 
@@ -39,5 +43,31 @@ public class PedidoDAO {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public void atualizar(Pedido pedido) {
+		this.entityManager.merge(pedido);
+	}
+	
+	public BigDecimal valorTotalVendido() {
+		String jpql = "SELECT SUM(p.valorTotal) FROM Pedido p";
+		
+		return entityManager.createQuery(jpql, BigDecimal.class).getSingleResult();
+	}
+	
+	
+	public List<RelatorioDeVendasVo> relatorioDeVendas() {
+		String jpql = "select new br.com.aliare.alura.loja.vo.RelatorioDeVendasVo ("
+				+ "produto.nome, "
+				+ "SUM(item.quantidade), "
+				+ "MAX(pedido.data)) "
+				+ "from Pedido pedido "
+				+ "join pedido.itens item "
+				+ "join item.produto produto "
+				+ "group by produto.nome "
+				+ "order by SUM(item.quantidade) desc";
+		
+		return entityManager.createQuery(jpql, RelatorioDeVendasVo.class).getResultList();
+	}
+
 
 }
