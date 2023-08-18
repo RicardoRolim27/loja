@@ -1,9 +1,15 @@
 package br.com.aliare.alura.loja.dao;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import br.com.aliare.alura.loja.modelo.Produto;
 
@@ -75,6 +81,67 @@ public class ProdutoDAO {
 			System.out.println("N�o foi poss�vel remover o produto");
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public List<Produto> buscarPorParametroDinamico(String nome, BigDecimal preco, LocalDate data){
+		
+		String jpql = "select p from Produto p where 1=1";
+		
+		if(nome !=null && !nome.trim().isEmpty()) {
+			jpql += " and p.nome = :nome";
+		}
+		
+		if(preco !=null) {
+			jpql += " and p.preco = :preco";
+		}
+		
+		if(data !=null) {
+			jpql += " and p.dataCadastro = :data";
+		}
+		
+		
+		TypedQuery<Produto> query = entityManager.createQuery(jpql, Produto.class);
+		
+		if(nome !=null && !nome.trim().isEmpty()) {
+			query.setParameter("nome", nome);
+		}
+		
+		if(preco !=null) {
+			query.setParameter("preco", preco);
+		}
+		
+		if(data !=null) {
+			query.setParameter("data", data);
+		}
+		
+		return query.getResultList();				
+				
+	}
+	
+	public List<Produto> buscaPorParametoComCriteria(String nome, BigDecimal preco, LocalDate data){
+		
+		CriteriaBuilder criteria = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Produto> query = criteria.createQuery(Produto.class);
+		
+		Root<Produto> from = query.from(Produto.class);
+		
+		Predicate filtro = criteria.and();
+		
+		if(nome !=null && !nome.trim().isEmpty()) {
+			filtro = criteria.and(filtro, criteria.equal(from.get("nome"), nome));
+		}
+		
+		if(preco !=null) {
+			filtro = criteria.and(filtro, criteria.equal(from.get("preco"), preco));
+		}
+		
+		if(data !=null) {
+			filtro = criteria.and(filtro, criteria.equal(from.get("dataCadastro"), data));
+		}
+		
+		query.where(filtro);		
+		
+		return entityManager.createQuery(query).getResultList();
 	}
 
 }
